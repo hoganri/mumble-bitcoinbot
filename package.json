@@ -1,0 +1,17 @@
+{
+  "name": "mumble-bitcoinbot",
+  "version": "0.0.2",
+  "description": "Mumble bot with commands to display Bitcoin info",
+  "main": "app.js",
+  "scripts": {
+    "bot": "make run"
+  },
+  "author": "richard",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "lame": "^1.2.4",
+    "mumble": "^0.3.21",
+    "node-fetch": "^2.6.0",
+    "striptags": "^3.0.1"
+  }
+}
