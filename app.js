@@ -170,6 +170,14 @@ function onMsg(msg, user, scope){
         chann.sendMessage(mempool);
       })
       .catch(err => { throw err });
+  } else if (msg === '!hash') {
+      fetch('https://blockchain.info/q/hashrate')
+      .then(res => res.json())
+      .then((out) => {
+        let hashrate = "Hashrate: "+out;
+        chann.sendMessage(hashrate);
+      })
+      .catch(err => { throw err });
   } else if (msg === '!help') {
     let commands = 'Commands: [!bal address, !fees, !mempool, !price, !height, !say]';
     chann.sendMessage(commands);
@@ -180,6 +188,29 @@ function onMsg(msg, user, scope){
     }
   }
 }
+
+setInterval(function() {
+  fetch('https://api.coindesk.com/v1/bpi/currentprice.json')
+  .then(res => res.json())
+  .then((out) => {
+    let usdRate = out.bpi.USD.rate;
+    let eurRate = out.bpi.EUR.rate;
+    let gbpRate = out.bpi.GBP.rate;
+    let theMessage = "<br/> USD: "+usdRate+" <br/> EUR: "+eurRate+" <br/> GBP: "+gbpRate;
+    chann.sendMessage(theMessage);
+  })
+  .catch(err => { throw err });
+},300000);
+
+setInterval(function() {
+  fetch('https://blockstream.info/api/fee-estimates')
+  .then(res => res.json())
+  .then((out) => {
+    let feeRates = "<br/> Next: "+parseInt(out['1'])+" sat/vB <br/> 1hr: "+parseInt(out['6'])+" sat/vB <br/> 4hr: "+parseInt(out['24'])+" sat/vB <br/> 1d: "+parseInt(out['144'])+" sat/vB";
+    chann.sendMessage(feeRates);
+  })
+  .catch(err => { throw err });
+}, 600000);
 
 function onConnError(err) {
   console.error('[onConnError]', err);
