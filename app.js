@@ -179,7 +179,7 @@ function onMsg(msg, user, scope){
       })
       .catch(err => { throw err });
   } else if (msg === '!help') {
-    let commands = 'Commands: [!bal address, !fees, !mempool, !price, !height, !say]';
+    let commands = 'Commands: [!bal address, !fees, !hash, !height, !mempool, !price, !say]';
     chann.sendMessage(commands);
   } else {
     // Accidental PM protection
