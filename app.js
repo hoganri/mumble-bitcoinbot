@@ -188,7 +188,7 @@ function onMsg(msg, user, scope){
   } else if (msg.indexOf('!coinflip') === 0) {
     var choice = msg.split('!coinflip ')[1];
     if (choice === "heads" || choice === "tails") {
-      var result = ((Math.random()*100)<50);
+      var result = (Math.random()*100);
       if (result < 50) {
         var winner = "tails";
       } else {
