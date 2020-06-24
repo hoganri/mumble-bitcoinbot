@@ -188,7 +188,8 @@ function onMsg(msg, user, scope){
   } else if (msg.indexOf('!coinflip') === 0) {
     var choice = msg.split('!coinflip ')[1];
     if (choice === "heads" || choice === "tails") {
-      var result = (Math.random()*100);
+      let result = (Math.random()*100);
+      // console.log(result);
       if (result < 50) {
         var winner = "tails";
       } else {
@@ -209,8 +210,23 @@ function onMsg(msg, user, scope){
         chann.sendMessage(out.quote);
       })
       .catch(err => { throw err }); 
+  } else if (msg === '!trump') {
+    fetch('https://api.whatdoestrumpthink.com/api/v1/quotes')
+    .then(res => res.json())
+    .then((out) => {
+      chann.sendMessage(out.messages.non_personalized[Math.floor(Math.random() * (48 - 0))]);
+    })
+    .catch(err => { throw err });  
+  } else if (msg.indexOf('!trumpinsult') === 0) {
+    var userToInsult = msg.split('!trumpinsult ')[1];
+    fetch('https://api.whatdoestrumpthink.com/api/v1/quotes')
+    .then(res => res.json())
+    .then((out) => {
+      chann.sendMessage(userToInsult+" "+out.messages.personalized[Math.floor(Math.random() * (572 - 0))]);
+    })
+    .catch(err => { throw err }); 
   } else if (msg === '!help') {
-    let commands = 'Commands: [!bal [bitcoin address], !coinflip [heads or tails], !fact, !fees, !kanye, !mempool, !price, !height, !say]';
+    let commands = 'Commands: [!bal [address], !coinflip [heads, tails], !fact, !fees, !height, !kanye, !mempool, !price, !say, !trump, !trumpinsult [user]]';
     chann.sendMessage(commands);
   } else {
     // Accidental PM protection
@@ -227,11 +243,11 @@ setInterval(function() {
     let usdRate = out.bpi.USD.rate_float.toFixed(2);
     let eurRate = out.bpi.EUR.rate_float.toFixed(2);
     let gbpRate = out.bpi.GBP.rate_float.toFixed(2);
-    let theMessage = "<br/> USD: "+usdRate+" <br/> EUR: "+eurRate+" <br/> GBP: "+gbpRate;
+    let theMessage = "<br/> Current Prices: <br/> USD: "+usdRate+" <br/> EUR: "+eurRate+" <br/> GBP: "+gbpRate;
     fetch('https://blockstream.info/api/fee-estimates')
     .then(res => res.json())
     .then((out) => {
-      let feeRates = "<br/> Next: "+parseInt(out['1'])+" sat/vB <br/> 1hr: "+parseInt(out['6'])+" sat/vB <br/> 4hr: "+parseInt(out['24'])+" sat/vB <br/> 1d: "+parseInt(out['144'])+" sat/vB";
+      let feeRates = "<br/> Recommended fees: <br/> Next: "+parseInt(out['1'])+" sat/vB <br/> 1hr: "+parseInt(out['6'])+" sat/vB <br/> 4hr: "+parseInt(out['24'])+" sat/vB <br/> 1d: "+parseInt(out['144'])+" sat/vB";
       chann.sendMessage(theMessage+" <br/> "+feeRates);
     })
     .catch(err => { throw err });
